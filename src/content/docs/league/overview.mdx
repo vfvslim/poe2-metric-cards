@@ -11,7 +11,7 @@ import { Aside } from '@astrojs/starlight/components';
 	module="League"
 	table="app_poe2_league_overview"
 	source="active overview + pay flat + register retention, league-windowed"
-	grain="as-of date × league_name × country × os"
+	grain="date × league_name × country × os"
 	notThis="normal daily DAU"
 />
 
@@ -57,7 +57,7 @@ None.
 
 ### 粒度 Grain
 
-One row per `dtstatdate` (as-of date), `league_name`, `country_code`, `os`.
+`dtstatdate` (as-of date) x `league_name` x `country_code` x `os`.
 
 Values are generally **cumulative within the league window**.
 
@@ -87,16 +87,34 @@ Resolve active league dates → aggregate daily active / pay / retention tables 
 ## YAML
 
 ```yaml
-id: league_overview
-aliases: [league KPIs, season overview, ingame_revenue]
-game: poe2
-domain: league
-status: draft
-tables:
-  - poe2_pc.app_poe2_league_overview
-sql:
-  - Path of Exile 2/League/app_poe2_league_overview.sql
-dag:
-  - databrain_poe2_league_d_v0
-grain: as-of date × league_name × country × os
+metric_case_id:
+title:
+business_question: What are PoE2 league / season cumulative KPIs so far for the active league, by country and platform?
+domain:
+caliber:
+	metric:
+	numerator:
+
+	denominator:
+	formula_summary:
+	filters:
+	- 
+	grain: date × league_name × country × os
+	dimensions:
+	- 
+source_tables:
+- name:
+  role:
+sql_pattern_summary:
+
+caveats:
+- 
+confidence:
+usable_for_sql_generation:
+related_meta: []
+retrieval:
+  aliases:
+  - 
+
+provenance:
 ```

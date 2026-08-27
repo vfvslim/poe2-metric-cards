@@ -49,7 +49,7 @@ None.
 
 ### 粒度 Grain
 
-- APP flat: `dtstatdate`, `country_code`, `os`
+- APP flat: `dtstatdate` x `country_code` x `os`
 - DWD / DWM: player-level (`openid`)
 
 ## 过滤条件 FILTERS
@@ -80,18 +80,34 @@ Load player pay into DWD → maintain full pay bitmap in DWM → aggregate to `a
 ## YAML
 
 ```yaml
-id: ingame_pay_amount_paid_users
-aliases: [paid_users, pay_amount, MTX, in-game revenue]
-game: poe2
-domain: ingame
-status: draft
-tables:
-  - poe2_pc.app_poe2_pay_flat_d
-  - poe2_pc.dwm_full_pay_bitmap_d
-  - poe2_pc.dwd_player_pay_d
-sql:
-  - Path of Exile 2/poe2_ingame_sales/app_pay_flat_d.sql
-dag:
-  - databrain_poe2_d_v0
-grain: date × country × os
+metric_case_id:
+title:
+business_question: What are PoE2 in-game (MTX) paid users and pay amount by country and platform on a given day?
+domain:
+caliber:
+	metric:
+	numerator:
+
+	denominator:
+	formula_summary:
+	filters:
+	- 
+	grain: date × country × os
+	dimensions:
+	- 
+source_tables:
+- name:
+  role:
+sql_pattern_summary:
+
+caveats:
+- 
+confidence:
+usable_for_sql_generation:
+related_meta: []
+retrieval:
+  aliases:
+  - 
+
+provenance:
 ```

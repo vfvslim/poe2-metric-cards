@@ -70,17 +70,34 @@ Single-day filter on `v_game_play`, take `dau` as `active_users`, group/insert b
 ## YAML
 
 ```yaml
-id: dau
-aliases: [active_users, daily active users, DAU]
-game: poe2
-domain: databrain
-status: draft
-tables:
-  - poe2_pc.app_poe2_active_overview_d
-sql:
-  - Path of Exile 2/poe2_pc_databrain/app_poe2_active_overview_d.sql
-  - Path of Exile 2/poe2_pc_databrain/v_game_play.sql
-dag:
-  - databrain_poe2_d_v0
-grain: date × country × os
+metric_case_id:
+title:
+business_question: Each day, how many PoE2 players are active, by country and platform?
+domain:
+caliber:
+	metric:
+	numerator:
+
+	denominator:
+	formula_summary:
+	filters:
+	- 
+	grain: dtstatdate × country_code × platform (os)
+	dimensions:
+	- 
+source_tables:
+- name:
+  role:
+sql_pattern_summary:
+
+caveats:
+- 
+confidence:
+usable_for_sql_generation:
+related_meta: []
+retrieval:
+  aliases:
+  - 
+
+provenance:
 ```

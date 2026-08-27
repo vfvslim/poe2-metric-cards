@@ -50,7 +50,7 @@ None.
 
 ### 粒度 Grain
 
-One row per `dtstatdate`, country, os (same table as DAU; not meaningful while always 0).
+`dtstatdate` x `country` x `os` (same table as DAU; not meaningful while always 0).
 
 ## 过滤条件 FILTERS
 
@@ -77,16 +77,34 @@ One row per `dtstatdate`, country, os (same table as DAU; not meaningful while a
 ## YAML
 
 ```yaml
-id: active_overview_retention_return_churn
-aliases: [retention_users, return_users, churn_users]
-game: poe2
-domain: databrain
-status: stubbed
-tables:
-  - poe2_pc.app_poe2_active_overview_d
-sql:
-  - Path of Exile 2/poe2_pc_databrain/app_poe2_active_overview_d.sql
-dag:
-  - databrain_poe2_d_v0
-grain: date × country × os
+metric_case_id:
+title:
+business_question: What do retention_users / return_users / churn_users mean on PoE2 active overview?
+domain:
+caliber:
+	metric:
+	numerator:
+
+	denominator:
+	formula_summary:
+	filters:
+	- 
+	grain: date × country × os
+	dimensions:
+	- 
+source_tables:
+- name:
+  role:
+sql_pattern_summary:
+
+caveats:
+- 
+confidence:
+usable_for_sql_generation:
+related_meta: []
+retrieval:
+  aliases:
+  - 
+
+provenance:
 ```

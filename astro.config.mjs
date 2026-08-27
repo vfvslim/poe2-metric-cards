@@ -8,7 +8,7 @@ export default defineConfig({
 	base: '/poe2-metric-cards',
 	integrations: [
 		starlight({
-			title: 'PoE2 口径卡',
+			title: 'PoE2',
 			description: 'Path of Exile 2 metric definitions for Databrain',
 			customCss: ['./src/styles/custom.css'],
 			pagefind: false,
@@ -16,26 +16,48 @@ export default defineConfig({
 			lastUpdated: true,
 			sidebar: [
 				{
-					label: 'Engagement',
+					label: '数据分层',
 					items: [
-						{ label: 'DAU / Active Users', slug: 'core/dau' },
-						{ label: 'Register Retention D1', slug: 'core/register-retention-d1' },
 						{
-							label: 'Overview Retention / Return / Churn',
-							slug: 'core/active-overview-retention-return-churn',
-							badge: { text: 'stubbed', variant: 'caution' },
+							label: '口径卡 Metric',
+							collapsed: true,
+							items: [
+								{ label: 'Overview', slug: 'metric' },
+								{
+									label: 'Engagement',
+									collapsed: true,
+									items: [
+										{ label: 'DAU / Active Users', slug: 'core/dau' },
+										{ label: 'Register Retention D1', slug: 'core/register-retention-d1' },
+										{
+											label: 'Overview Retention / Return / Churn',
+											slug: 'core/active-overview-retention-return-churn',
+											badge: { text: 'stubbed', variant: 'caution' },
+										},
+									],
+								},
+								{
+									label: 'Sales & Monetization',
+									collapsed: true,
+									items: [
+										{ label: 'In-game Pay Amount / Paid Users', slug: 'core/ingame-pay-amount' },
+										{ label: 'Platform Net Revenue', slug: 'core/platform-net-revenue' },
+									],
+								},
+								{
+									label: 'League Stats',
+									collapsed: true,
+									items: [{ label: 'League Overview', slug: 'league/overview' }],
+								},
+							],
 						},
+						{ label: '应用层 ADS', slug: 'ads', badge: { text: 'todo', variant: 'caution' } },
+						{ label: '数仓层 DW', slug: 'dw', badge: { text: 'todo', variant: 'caution' } },
+						{ label: '汇总层 DWM', slug: 'dwm', badge: { text: 'todo', variant: 'caution' } },
+						{ label: '维度层 DIM', slug: 'dim', badge: { text: 'todo', variant: 'caution' } },
+						{ label: '贴源层 ODS', slug: 'ods', badge: { text: 'todo', variant: 'caution' } },
+						{ label: '知识层 Knowledge', slug: 'knowledge', badge: { text: 'todo', variant: 'caution' } },
 					],
-				},
-				{
-					label: 'Sales & Monetization',
-					items: [
-					{ label: 'In-game Pay Amount / Paid Users', slug: 'core/ingame-pay-amount' },
-					{ label: 'Platform Net Revenue', slug: 'core/platform-net-revenue' }],
-				},
-				{
-					label: 'League Stats',
-					items: [{ label: 'League Overview', slug: 'league/overview' }],
 				},
 			],
 		}),

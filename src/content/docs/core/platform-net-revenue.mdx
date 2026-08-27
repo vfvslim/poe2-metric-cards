@@ -38,7 +38,7 @@ None.
 
 ### 粒度 Grain
 
-One row per `dtstatdate`, `os`, `country_code`, `product_unified_id` / category.
+`dtstatdate` x `os` x `country_code` x `product_unified_id` / category.
 
 ## 过滤条件 FILTERS
 
@@ -74,16 +74,34 @@ Build per-store daily revenue tables → union in `app_platform_revenue_d.sql` �
 ## YAML
 
 ```yaml
-id: platform_net_revenue
-aliases: [net_revenue, store revenue, platform revenue]
-game: poe2
-domain: platform
-status: draft
-tables:
-  - poe2_pc.app_poe2_platform_revenue_d
-sql:
-  - Path of Exile 2/poe2_pc_sales/app_platform_revenue_d.sql
-dag:
-  - databrain_poe2_d_v0
-grain: date × os × country × product
+metric_case_id:
+title:
+business_question: What is PoE2 platform / store net revenue by store, country, and product on a given day?
+domain:
+caliber:
+	metric:
+	numerator:
+
+	denominator:
+	formula_summary:
+	filters:
+	- 
+	grain: date × os × country × product
+	dimensions:
+	- 
+source_tables:
+- name:
+  role:
+sql_pattern_summary:
+
+caveats:
+- 
+confidence:
+usable_for_sql_generation:
+related_meta: []
+retrieval:
+  aliases:
+  - 
+
+provenance:
 ```

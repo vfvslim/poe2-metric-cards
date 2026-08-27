@@ -74,18 +74,34 @@ Join today’s `v_game_play.retention_d1` with yesterday’s `v_game_play.new` o
 ## YAML
 
 ```yaml
-id: register_retention_d1
-aliases: [D1 retention, active_users_d2, next-day register retention]
-game: poe2
-domain: databrain
-status: draft
-tables:
-  - poe2_pc.dws_poe2_register_retention_d
-  - poe2_pc.app_poe2_register_retention_flat_d
-sql:
-  - Path of Exile 2/poe2_pc_databrain/dws_poe2_register_retention_d.sql
-  - Path of Exile 2/poe2_pc_databrain/app_poe2_register_retention_flat_d.sql
-dag:
-  - databrain_poe2_d_v0
-grain: date × register_date × country × os
+metric_case_id:
+title:
+business_question: Players who registered on a cohort day, how many returned the next day (D1 retention), by country and platform?
+domain:
+caliber:
+	metric:
+	numerator:
+
+	denominator:
+	formula_summary:
+	filters:
+	- 
+	grain: date × register_date × country × os
+	dimensions:
+	- 
+source_tables:
+- name:
+  role:
+sql_pattern_summary:
+
+caveats:
+- 
+confidence:
+usable_for_sql_generation:
+related_meta: []
+retrieval:
+  aliases:
+  - 
+
+provenance:
 ```

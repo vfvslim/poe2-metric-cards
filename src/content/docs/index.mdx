@@ -1,76 +1,48 @@
 ---
-title: PoE2 口径卡
-description: Metric definition cards for Path of Exile 2 Databrain.
+title: PoE2
+description: Path of Exile 2 Databrain semantic catalog — start from data layers.
 template: splash
 hero:
-  tagline: What each metric means, how it is calculated, and what not to confuse it with. Definitions only — not live KPI values.
-  actions:
-    - text: Start with DAU
-      link: /poe2-metric-cards/core/dau/
-      icon: right-arrow
-    - text: League overview
-      link: /poe2-metric-cards/league/overview/
-      icon: right-arrow
-      variant: minimal
+  tagline: Catalog Copilot–style 数据分层 for PoE2. Open a layer, then drill into assets. Definitions only — not live KPI values.
 ---
 
 import { CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
 
-## Engagement
+## 数据分层
+
+Seven layers, same idea as Catalog Copilot. **口径卡** has draft metric cards; the others are placeholders for now.
 
 <CardGrid>
 	<LinkCard
-		title="DAU / Active Users"
-		href="/poe2-metric-cards/core/dau/"
-		description="Players active on a calendar day, by country and platform."
+		title="口径卡 Metric"
+		href="/poe2-metric-cards/metric/"
 	/>
 	<LinkCard
-		title="Register Retention D1"
-		href="/poe2-metric-cards/core/register-retention-d1/"
-		description="Next-day return of a register cohort, stored as active_users_d2."
+		title="应用层 ADS"
+		href="/poe2-metric-cards/ads/"
 	/>
 	<LinkCard
-		title="Overview Retention / Return / Churn"
-		href="/poe2-metric-cards/core/active-overview-retention-return-churn/"
-		description="Stubbed — hard-coded 0 on active overview. Not a KPI."
+		title="数仓层 DW"
+		href="/poe2-metric-cards/dw/"
+	/>
+	<LinkCard
+		title="汇总层 DWM"
+		href="/poe2-metric-cards/dwm/"
+	/>
+	<LinkCard
+		title="维度层 DIM"
+		href="/poe2-metric-cards/dim/"
+	/>
+	<LinkCard
+		title="贴源层 ODS"
+		href="/poe2-metric-cards/ods/"
+	/>
+	<LinkCard
+		title="知识层 Knowledge"
+		href="/poe2-metric-cards/knowledge/"
 	/>
 </CardGrid>
 
-## Sales & Monetization
-
-<CardGrid>
-	<LinkCard
-		title="In-Game Pay Amount / Paid Users"
-		href="/poe2-metric-cards/core/ingame-pay-amount/"
-		description="MTX payers and spend from the pay bitmap — not store revenue."
-	/>
-	<LinkCard
-		title="Platform Net Revenue"
-		href="/poe2-metric-cards/core/platform-net-revenue/"
-		description="Store net revenue after chargebacks, by store and product."
-	/>
-</CardGrid>
-
-## League Stats
-
-<CardGrid>
-	<LinkCard
-		title="League Overview"
-		href="/poe2-metric-cards/league/overview/"
-		description="Season-window cumulative KPIs for the active league."
-	/>
-</CardGrid>
-
-<Aside type="note" title="Three things people mix up">
-	In-game MTX is not store revenue. League cumulative actives are not daily DAU.
-	A column existing on a table does not mean the metric is implemented.
+<Aside type="tip" title="How to browse">
+	Home → pick a **数据分层** category → open an asset (for 口径卡, that means a metric card).
 </Aside>
-
-## How to read a card
-
-Every card follows the same order: **业务问题** (the question it answers), **指标定义**,
-**计算公式**, **分子 / 分母**, **粒度**, **过滤条件**, **维度**, **踩坑与注意**, **SQL 模式**,
-then a machine-readable **YAML** block for the data agent.
-
-The status pill at the top of each card says how much to trust it — `draft` means
-written from SQL but not signed off, `stubbed` means the logic is not implemented.

@@ -161,9 +161,162 @@
 }
 
 .sidebar ul.top-level ul li + li {
-	margin-top: 0.5rem;
+	margin-top: 0.2rem;
 }
 
 .sidebar ul.top-level a {
 	padding-block: 0.35rem;
 }
+
+/* Color dots + aligned rows for the 7 数据分层 links. */
+.sidebar a[href$='/metric/']::before,
+.sidebar a[href$='/ads/']::before,
+.sidebar a[href$='/dw/']::before,
+.sidebar a[href$='/dwm/']::before,
+.sidebar a[href$='/dim/']::before,
+.sidebar a[href$='/ods/']::before,
+.sidebar a[href$='/knowledge/']::before {
+	content: '';
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 999px;
+	flex-shrink: 0;
+}
+
+.sidebar a[href$='/metric/']::before {
+	background: #e5484d;
+}
+.sidebar a[href$='/ads/']::before {
+	background: #f5a524;
+}
+.sidebar a[href$='/dw/']::before {
+	background: #30a46c;
+}
+.sidebar a[href$='/dwm/']::before {
+	background: #12a594;
+}
+.sidebar a[href$='/dim/']::before {
+	background: #3b82f6;
+}
+.sidebar a[href$='/ods/']::before {
+	background: #8b5cf6;
+}
+.sidebar a[href$='/knowledge/']::before {
+	background: #06b6d4;
+}
+
+/*
+ * Same row layout for every layer:
+ * [dot] [label …………] [badge]
+ */
+.sidebar a[href$='/metric/'],
+.sidebar a[href$='/ads/'],
+.sidebar a[href$='/dw/'],
+.sidebar a[href$='/dwm/'],
+.sidebar a[href$='/dim/'],
+.sidebar a[href$='/ods/'],
+.sidebar a[href$='/knowledge/'] {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	font-size: var(--sl-text-sm);
+	font-weight: 400;
+}
+
+.sidebar a[href$='/metric/'] .sl-badge,
+.sidebar a[href$='/ads/'] .sl-badge,
+.sidebar a[href$='/dw/'] .sl-badge,
+.sidebar a[href$='/dwm/'] .sl-badge,
+.sidebar a[href$='/dim/'] .sl-badge,
+.sidebar a[href$='/ods/'] .sl-badge,
+.sidebar a[href$='/knowledge/'] .sl-badge {
+	margin-left: auto;
+}
+
+/*
+ * 口径卡 is a collapsible group again (so cards hide until opened).
+ * Style that group label like the other layer links.
+ */
+.sidebar ul.top-level > li > details > ul > li:first-child > details > summary {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	font-size: var(--sl-text-sm);
+	font-weight: 400;
+}
+
+.sidebar ul.top-level > li > details > ul > li:first-child > details > summary .group-label .large {
+	font-size: var(--sl-text-sm);
+	font-weight: 400;
+}
+
+.sidebar ul.top-level > li > details > ul > li:first-child > details > summary .group-label .large::before {
+	content: '';
+	display: inline-block;
+	width: 0.5rem;
+	height: 0.5rem;
+	margin-right: 0.4rem;
+	border-radius: 999px;
+	background: #e5484d;
+	vertical-align: 0.1em;
+}
+
+
+
+/* ---- Splash home (数据分层) ---- */
+
+/* Hero default padding is huge; pull the layer grid up. */
+.hero {
+	padding-block: 2.5rem;
+}
+
+/* First section under the hero should not inherit metric-card h2 spacing. */
+.sl-markdown-content > .sl-heading-wrapper.level-h2:first-child {
+	margin-top: 0.75rem;
+	padding-top: 0;
+	border-top: 0;
+}
+
+/* Tighter cards in the 7-layer grid. */
+.card-grid {
+	gap: 0.75rem;
+}
+
+/*
+ * Color dots for 数据分层 categories on the splash home only
+ * (pages with a hero). Matches Catalog Copilot layer colors.
+ */
+.content-panel:has(.hero) .card-grid .sl-link-card .title::before {
+	content: '';
+	display: inline-block;
+	width: 0.55rem;
+	height: 0.55rem;
+	margin-right: 0.45rem;
+	border-radius: 999px;
+	vertical-align: 0.1em;
+	flex-shrink: 0;
+}
+
+.content-panel:has(.hero) .card-grid .sl-link-card:nth-child(1) .title::before {
+	background: #e5484d; /* 口径卡 */
+}
+.content-panel:has(.hero) .card-grid .sl-link-card:nth-child(2) .title::before {
+	background: #f5a524; /* 应用层 ADS */
+}
+.content-panel:has(.hero) .card-grid .sl-link-card:nth-child(3) .title::before {
+	background: #30a46c; /* 数仓层 DW */
+}
+.content-panel:has(.hero) .card-grid .sl-link-card:nth-child(4) .title::before {
+	background: #12a594; /* 汇总层 DWM */
+}
+.content-panel:has(.hero) .card-grid .sl-link-card:nth-child(5) .title::before {
+	background: #3b82f6; /* 维度层 DIM */
+}
+.content-panel:has(.hero) .card-grid .sl-link-card:nth-child(6) .title::before {
+	background: #8b5cf6; /* 贴源层 ODS */
+}
+.content-panel:has(.hero) .card-grid .sl-link-card:nth-child(7) .title::before {
+	background: #06b6d4; /* 知识层 Knowledge */
+}
+
+
