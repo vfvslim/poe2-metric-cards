@@ -6,19 +6,34 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'PoE2 口径卡',
+			description: 'Path of Exile 2 metric definitions for Databrain',
+			customCss: ['./src/styles/custom.css'],
+			pagefind: false,
+			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
+			lastUpdated: true,
 			sidebar: [
 				{
-					label: 'Guides',
+					label: 'Engagement',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
+						{ label: 'DAU / Active Users', slug: 'core/dau' },
+						{ label: 'Register Retention D1', slug: 'core/register-retention-d1' },
+						{
+							label: 'Overview Retention / Return / Churn',
+							slug: 'core/active-overview-retention-return-churn',
+							badge: { text: 'stubbed', variant: 'caution' },
+						},
 					],
 				},
 				{
-					label: 'Reference',
-					items: [{ autogenerate: { directory: 'reference' } }],
+					label: 'Sales & Monetization',
+					items: [
+					{ label: 'In-game Pay Amount / Paid Users', slug: 'core/ingame-pay-amount' },
+					{ label: 'Platform Net Revenue', slug: 'core/platform-net-revenue' }],
+				},
+				{
+					label: 'League Stats',
+					items: [{ label: 'League Overview', slug: 'league/overview' }],
 				},
 			],
 		}),

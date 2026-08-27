@@ -1,0 +1,86 @@
+---
+title: PoE2 DAU / Active Users
+description: Each day, how many PoE2 players are active, by country and platform?
+---
+
+import MetricMeta from '../../../components/MetricMeta.astro';
+
+<MetricMeta
+	status="draft"
+	module="Core · Databrain"
+	table="app_poe2_active_overview_d"
+	source="v_game_play.dau"
+	grain="date × country × os"
+	notThis="NZT / segment / mobile, league cumulative actives"
+/>
+
+## 业务问题 BUSINESS QUESTION
+
+Each day, how many PoE2 players are active, by country and platform?
+
+## 指标定义
+
+Players active on a given calendar day (`active_users`).
+
+每日活跃用户数 / `active_users` (DAU).
+
+## 计算公式
+
+Take `dau` from `v_game_play` for the day and write it to `app_poe2_active_overview_d.active_users` by country and os.
+
+## 口径要素
+
+### 分子 Numerator
+
+Players active on `dtstatdate`. `active_users` = `v_game_play.dau`, grouped by `country_code`, `os`.
+
+Some inserts left-join `app_poe2_total_new_user_d` for `total_users`; that does **not** change DAU.
+
+### 分母 Denominator
+
+None (count metric, not a rate).
+
+### 粒度 Grain
+
+`dtstatdate` × `country_code` × platform (`os`)
+
+## 过滤条件 FILTERS
+
+- `dtstatdate = '{{ ds }}'`
+- Country mapping in `v_game_play`: `all` → `255`, `none` → `not_found`
+- Platform mapped to `os` (Steam = 11, Xbox = 9, Epic = 12, Kakao = 15, all = 255)
+- `os` / country sentinel `255` / `'255'` = all rollup
+
+## 维度
+
+- `dtstatdate` (stat date)
+- `country_code` (country)
+- `os` (platform)
+
+## 踩坑与注意 CAVEATS
+
+- This is main PC Databrain DAU only — not NZT / segment / mobile, and not league cumulative actives.
+- On the same table, `retention_users` / `return_users` / `churn_users` are SQL `0`; do not treat them as KPIs. See [Overview retention / return / churn](/core/active-overview-retention-return-churn/).
+- `total_users` is cumulative new, not daily `new_users`.
+
+## SQL 模式
+
+Single-day filter on `v_game_play`, take `dau` as `active_users`, group/insert by country/os into `app_poe2_active_overview_d`. Left join `app_poe2_total_new_user_d` for `total_users` only.
+
+## YAML
+
+```yaml
+id: dau
+aliases: [active_users, daily active users, DAU]
+game: poe2
+domain: databrain
+status: draft
+tables:
+  - poe2_pc.app_poe2_active_overview_d
+sql:
+  - Path of Exile 2/poe2_pc_databrain/app_poe2_active_overview_d.sql
+  - Path of Exile 2/poe2_pc_databrain/v_game_play.sql
+dag:
+  - databrain_poe2_d_v0
+grain: date × country × os
+```

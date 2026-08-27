@@ -1,0 +1,169 @@
+/* PoE2 口径卡 — amber accent on a warm neutral base. */
+
+/* ---- Theme tokens ---- */
+
+:root {
+	--sl-color-accent-low: #40300a;
+	--sl-color-accent: #a8791b;
+	--sl-color-accent-high: #f0d9a3;
+
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #eeedeb;
+	--sl-color-gray-2: #c3c1bc;
+	--sl-color-gray-3: #8b8881;
+	--sl-color-gray-4: #585550;
+	--sl-color-gray-5: #383530;
+	--sl-color-gray-6: #27251f;
+	--sl-color-gray-7: #1e1c17;
+	--sl-color-black: #191712;
+
+	--metric-draft: #d6a83c;
+	--metric-stubbed: #d97757;
+	--metric-verified: #6cbf7a;
+
+	--sl-sidebar-width: 20rem;
+	--sl-content-width: 122rem;
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: #f6ecd4;
+	--sl-color-accent: #8a6410;
+	--sl-color-accent-high: #453109;
+
+	--sl-color-white: #17150f;
+	--sl-color-gray-1: #26241f;
+	--sl-color-gray-2: #3f3c36;
+	--sl-color-gray-3: #6b6862;
+	--sl-color-gray-4: #918d85;
+	--sl-color-gray-5: #d0cdc6;
+	--sl-color-gray-6: #eeece7;
+	--sl-color-gray-7: #f7f5f1;
+	--sl-color-black: #ffffff;
+
+	--metric-draft: #8a6410;
+	--metric-stubbed: #a8441f;
+	--metric-verified: #2f7a41;
+}
+
+/* ---- Site chrome ---- */
+
+.site-title span {
+	letter-spacing: -0.01em;
+	font-weight: 600;
+}
+
+/* ---- Metric header ---- */
+
+.metric-meta {
+	margin: 0 0 1.75rem;
+	padding: 1rem 1.125rem;
+	border: 1px solid var(--sl-color-gray-5);
+	border-left: 3px solid var(--sl-color-accent);
+	border-radius: 0.25rem;
+	background: var(--sl-color-gray-6);
+}
+
+.metric-meta__status {
+	display: inline-block;
+	margin-bottom: 0.75rem;
+	padding: 0.1rem 0.5rem;
+	border: 1px solid currentColor;
+	border-radius: 999px;
+	font-size: var(--sl-text-xs);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+.metric-meta__status.is-draft {
+	color: var(--metric-draft);
+}
+.metric-meta__status.is-stubbed {
+	color: var(--metric-stubbed);
+}
+.metric-meta__status.is-verified {
+	color: var(--metric-verified);
+}
+
+.metric-meta dl {
+	display: flex;
+	flex-direction: column;
+	gap: 0.45rem;
+	margin: 0;
+	font-size: var(--sl-text-sm);
+}
+
+.metric-meta__row {
+	display: grid;
+	grid-template-columns: 5.5rem minmax(0, 1fr);
+	gap: 0 1rem;
+	align-items: baseline;
+}
+
+.metric-meta dt {
+	color: var(--sl-color-gray-3);
+	font-weight: 500;
+}
+
+.metric-meta dd {
+	margin: 0;
+	color: var(--sl-color-white);
+}
+
+.metric-meta dd code {
+	font-size: 0.9em;
+	padding-inline: 0.3em;
+	margin-inline-start: -0.3em;
+}
+
+/* ---- Card body ---- */
+
+/*
+ * Heading size must be set on the wrapper *and* the heading. Starlight derives
+ * the anchor icon size, gap, and negative margin from em units on both, so
+ * changing only one makes the link icon overlap the heading text.
+ */
+.sl-markdown-content .sl-heading-wrapper.level-h2,
+.sl-markdown-content h2 {
+	font-size: var(--sl-text-lg);
+}
+
+.sl-markdown-content .sl-heading-wrapper.level-h3,
+.sl-markdown-content h3 {
+	font-size: var(--sl-text-base);
+}
+
+/*
+ * Spacing and the divider go on the wrapper, not the h2: the anchor link is a
+ * sibling of the heading, so padding on the h2 alone drops the text below it.
+ */
+.sl-markdown-content .sl-heading-wrapper.level-h2 {
+	margin-top: 2.5rem;
+}
+
+.sl-markdown-content .sl-heading-wrapper.level-h2 ~ .sl-heading-wrapper.level-h2 {
+	padding-top: 0.9rem;
+	border-top: 1px solid var(--sl-color-gray-5);
+}
+
+.sl-markdown-content .sl-heading-wrapper:has(#踩坑与注意-caveats) + ul li::marker {
+	color: var(--metric-stubbed);
+}
+
+/* ---- Left sidebar ---- */
+
+.sidebar ul.top-level > li + li {
+	margin-top: 1.8rem;
+}
+
+.sidebar ul.top-level details > ul {
+	padding-top: 0.3rem;
+}
+
+.sidebar ul.top-level ul li + li {
+	margin-top: 0.5rem;
+}
+
+.sidebar ul.top-level a {
+	padding-block: 0.35rem;
+}

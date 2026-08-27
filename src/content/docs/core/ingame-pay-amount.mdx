@@ -1,0 +1,97 @@
+---
+title: PoE2 In-Game Pay Amount / Paid Users
+description: PoE2 in-game (MTX) paid users and pay amount by country and platform on a given day.
+---
+
+import MetricMeta from '../../../components/MetricMeta.astro';
+
+<MetricMeta
+	status="draft"
+	module="Core · In-game"
+	table="app_poe2_pay_flat_d"
+	source="dwd_player_pay_d → dwm_full_pay_bitmap_d"
+	grain="date × country × os"
+	notThis="Steam / Epic / Xbox / PS / web / Kakao store revenue"
+/>
+
+## 业务问题 BUSINESS QUESTION
+
+What are PoE2 in-game (MTX) paid users and pay amount by country and platform on a given day?
+
+## 指标定义
+
+In-game payment metrics: who paid (`paid_users`) and how much (`pay_amount`) from in-game MTX spend.
+
+Shown mainly via `app_poe2_pay_flat_d`. **Not** Steam / Xbox / other store revenue.
+
+## 计算公式
+
+Pipeline: `dwd_player_pay_d` → `dwm_full_pay_bitmap_d` → `app_pay_flat_d`
+
+- **DWD:** player-day pay detail
+- **DWM:** ever-paid players + `cbitmap` / `cbitmap_reverse`
+- **APP:** aggregate paid users / pay amount by date × country × os
+
+Payer flags (paid / new-paid / retention / return / churn style) come from the bitmap.
+
+League overview often uses `sum(pay_amount) / 100` as `ingame_revenue`.
+
+## 口径要素
+
+### 分子 Numerator
+
+- `paid_users`: distinct payers with today’s pay bit set
+- `pay_amount`: sum of the day’s pay amount from bitmap / pay flat
+
+### 分母 Denominator
+
+None.
+
+### 粒度 Grain
+
+- APP flat: `dtstatdate`, `country_code`, `os`
+- DWD / DWM: player-level (`openid`)
+
+## 过滤条件 FILTERS
+
+- `dtstatdate = '{{ ds }}'`
+- Aggregate from the ever-paid bitmap population
+- Some dims use `255` / `'255'` as all
+- `game_code` = `poe2`
+
+## 维度
+
+- `dtstatdate`
+- `country_code`
+- `os`
+
+## 踩坑与注意 CAVEATS
+
+- In-game MTX only; **not** Steam / Epic / Xbox / PS / web / Kakao store revenue. See [Platform net revenue](/core/platform-net-revenue/).
+- Payer retention ≠ gameplay DAU retention.
+- League `ingame_revenue` often uses `sum(pay_amount) / 100` and is **league-window** scoped. See [League overview](/league/overview/).
+- DWM is ever-paid history, not “paid today only”.
+- PoE1 has the same d/m pattern under `poe1_ingame_sales`.
+
+## SQL 模式
+
+Load player pay into DWD → maintain full pay bitmap in DWM → aggregate to `app_pay_flat_d` by date / country / os.
+
+## YAML
+
+```yaml
+id: ingame_pay_amount_paid_users
+aliases: [paid_users, pay_amount, MTX, in-game revenue]
+game: poe2
+domain: ingame
+status: draft
+tables:
+  - poe2_pc.app_poe2_pay_flat_d
+  - poe2_pc.dwm_full_pay_bitmap_d
+  - poe2_pc.dwd_player_pay_d
+sql:
+  - Path of Exile 2/poe2_ingame_sales/app_pay_flat_d.sql
+dag:
+  - databrain_poe2_d_v0
+grain: date × country × os
+```

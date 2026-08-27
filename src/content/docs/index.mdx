@@ -1,40 +1,76 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: PoE2 口径卡
+description: Metric definition cards for Path of Exile 2 Databrain.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
+  tagline: What each metric means, how it is calculated, and what not to confuse it with. Definitions only — not live KPI values.
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Start with DAU
+      link: /core/dau/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
+    - text: League overview
+      link: /league/overview/
+      icon: right-arrow
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
 
-## Next steps
+## Engagement
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
+<CardGrid>
+	<LinkCard
+		title="DAU / Active Users"
+		href="/core/dau/"
+		description="Players active on a calendar day, by country and platform."
+	/>
+	<LinkCard
+		title="Register Retention D1"
+		href="/core/register-retention-d1/"
+		description="Next-day return of a register cohort, stored as active_users_d2."
+	/>
+	<LinkCard
+		title="Overview Retention / Return / Churn"
+		href="/core/active-overview-retention-return-churn/"
+		description="Stubbed — hard-coded 0 on active overview. Not a KPI."
+	/>
 </CardGrid>
+
+## Sales & Monetization
+
+<CardGrid>
+	<LinkCard
+		title="In-Game Pay Amount / Paid Users"
+		href="/core/ingame-pay-amount/"
+		description="MTX payers and spend from the pay bitmap — not store revenue."
+	/>
+	<LinkCard
+		title="Platform Net Revenue"
+		href="/core/platform-net-revenue/"
+		description="Store net revenue after chargebacks, by store and product."
+	/>
+</CardGrid>
+
+## League Stats
+
+<CardGrid>
+	<LinkCard
+		title="League Overview"
+		href="/league/overview/"
+		description="Season-window cumulative KPIs for the active league."
+	/>
+</CardGrid>
+
+<Aside type="note" title="Three things people mix up">
+	In-game MTX is not store revenue. League cumulative actives are not daily DAU.
+	A column existing on a table does not mean the metric is implemented.
+</Aside>
+
+## How to read a card
+
+Every card follows the same order: **业务问题** (the question it answers), **指标定义**,
+**计算公式**, **分子 / 分母**, **粒度**, **过滤条件**, **维度**, **踩坑与注意**, **SQL 模式**,
+then a machine-readable **YAML** block for the data agent.
+
+The status pill at the top of each card says how much to trust it — `draft` means
+written from SQL but not signed off, `stubbed` means the logic is not implemented.

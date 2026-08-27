@@ -1,0 +1,34 @@
+---
+interface Props {
+	status: 'verified' | 'draft' | 'stubbed' | 'deprecated';
+	module: string;
+	table?: string;
+	source?: string;
+	grain?: string;
+	notThis?: string;
+}
+
+const { status, module: moduleName, table, source, grain, notThis } = Astro.props;
+
+const rows = [
+	{ key: 'Module', value: moduleName, mono: false },
+	{ key: 'Table', value: table, mono: true },
+	{ key: 'Source', value: source, mono: true },
+	{ key: 'Grain', value: grain, mono: false },
+	{ key: 'Not this', value: notThis, mono: false },
+].filter((row) => row.value);
+---
+
+<div class="metric-meta">
+	<span class:list={['metric-meta__status', `is-${status}`]}>{status}</span>
+	<dl>
+		{
+			rows.map((row) => (
+				<div class="metric-meta__row">
+					<dt>{row.key}</dt>
+					<dd>{row.mono ? <code>{row.value}</code> : row.value}</dd>
+				</div>
+			))
+		}
+	</dl>
+</div>

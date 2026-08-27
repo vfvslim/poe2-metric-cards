@@ -1,0 +1,91 @@
+---
+title: PoE2 Register Retention D1
+description: Players who registered on a cohort day, how many returned the next day (D1), by country and platform?
+---
+
+import MetricMeta from '../../../components/MetricMeta.astro';
+
+<MetricMeta
+	status="draft"
+	module="Core · Databrain"
+	table="dws_poe2_register_retention_d → app_poe2_register_retention_flat_d"
+	source="active_users_d2"
+	grain="date × register_date × country × os"
+	notThis="active-overview retention_users (stubbed)"
+/>
+
+## 业务问题 BUSINESS QUESTION
+
+Players who registered on a cohort day, how many returned the next day (D1 retention), by country and platform?
+
+## 指标定义
+
+D1 retained users of a register cohort (count; rate is upstream).
+
+## 计算公式
+
+Look cohort to `register_date` = `dtstatdate` − 1 day.
+
+Retained count = yesterday’s `v_game_play.new` × today’s `v_game_play.retention_d1`; store as `active_users_d2`.
+
+`retained_users` = `register_users` × `retention_d1`
+
+## 口径要素
+
+### 分子 Numerator
+
+Players in the register cohort who return next day.
+
+Count stored as `retention_d1` × `register_users` (`register_users` = `v_game_play.new` on `dtstatdate` − 1).
+
+### 分母 Denominator
+
+`register_users` (cohort size) if answering as a **rate**. Use `retention_d1` directly for the rate.
+
+### 粒度 Grain
+
+`dtstatdate` × `register_date` × country × os
+
+## 过滤条件 FILTERS
+
+- `dtstatdate = '{{ ds }}'`
+- Cohort join: `register_date` = `date_sub(dtstatdate, interval 1 day)`
+- Join keys: country, os
+- D1 block uses `retention_d1` (other horizons are separate union blocks)
+
+## 维度
+
+- `dtstatdate`
+- `register_date`
+- `country`
+- `os`
+
+## 踩坑与注意 CAVEATS
+
+- Main PC only; not NZT / segment / mobile; not league-vs-prior-league cumulative actives.
+- Say **D1 retention**. Mention `active_users_d2` only if asked (DataBrain D-index: D2 = next calendar day).
+- Confirm whether the asker wants a **rate** or a **count**.
+- Not the same as active-overview `retention_users` (stubbed = 0). See [Overview retention / return / churn](/core/active-overview-retention-return-churn/).
+
+## SQL 模式
+
+Join today’s `v_game_play.retention_d1` with yesterday’s `v_game_play.new` on country / os → write `active_users_d2` into `dws_poe2_register_retention_d` → flatten in `app_poe2_register_retention_flat_d`.
+
+## YAML
+
+```yaml
+id: register_retention_d1
+aliases: [D1 retention, active_users_d2, next-day register retention]
+game: poe2
+domain: databrain
+status: draft
+tables:
+  - poe2_pc.dws_poe2_register_retention_d
+  - poe2_pc.app_poe2_register_retention_flat_d
+sql:
+  - Path of Exile 2/poe2_pc_databrain/dws_poe2_register_retention_d.sql
+  - Path of Exile 2/poe2_pc_databrain/app_poe2_register_retention_flat_d.sql
+dag:
+  - databrain_poe2_d_v0
+grain: date × register_date × country × os
+```

@@ -1,0 +1,89 @@
+---
+title: PoE2 Platform Net Revenue
+description: PoE2 platform/store net revenue by store, country, and product on a given day.
+---
+
+import MetricMeta from '../../../components/MetricMeta.astro';
+
+<MetricMeta
+	status="draft"
+	module="Core · Platform"
+	table="app_poe2_platform_revenue_d"
+	source="per-store revenue tables (union)"
+	grain="date × os × country × product"
+	notThis="in-game MTX (app_poe2_pay_flat_d)"
+/>
+
+## 业务问题 BUSINESS QUESTION
+
+What is PoE2 platform / store net revenue by store, country, and product on a given day?
+
+## 指标定义
+
+Platform (store) **net revenue** / net revenue after chargebacks.
+
+## 计算公式
+
+Each store SQL runs first (Steam / Xbox / PlayStation / Epic / official web / Kakao), then union into `app_poe2_platform_revenue_d`.
+
+## 口径要素
+
+### 分子 Numerator
+
+`net_revenue` (and related gross / chargeback / unit fields) aggregated from per-store revenue tables into `app_poe2_platform_revenue_d`.
+
+### 分母 Denominator
+
+None.
+
+### 粒度 Grain
+
+One row per `dtstatdate`, `os`, `country_code`, `product_unified_id` / category.
+
+## 过滤条件 FILTERS
+
+- `dtstatdate = '{{ ds }}'`
+- Store identified by `os`:
+  - 8 = PlayStation
+  - 9 = Xbox
+  - 11 = Steam
+  - 12 = Epic
+  - 13 = Official web
+  - 15 = Kakao
+- Product eligibility depends on `poe_product_list` / store product-info tables
+
+## 维度
+
+- `dtstatdate`
+- `os`
+- `country_code`
+- `product_unified_id`
+- `category`
+
+## 踩坑与注意 CAVEATS
+
+- Platform revenue only; **not** in-game MTX (`app_poe2_pay_flat_d`). See [In-game pay](/core/ingame-pay-amount/).
+- Not the same as league `ingame_revenue` (`sum(pay_amount) / 100` over the league window). See [League overview](/league/overview/).
+- Always say **platform / store** vs **in-game**.
+- PoE1 in the focus folder is more Steam-centric; do not assume the same full multi-store union.
+
+## SQL 模式
+
+Build per-store daily revenue tables → union in `app_platform_revenue_d.sql` → land in `app_poe2_platform_revenue_d`.
+
+## YAML
+
+```yaml
+id: platform_net_revenue
+aliases: [net_revenue, store revenue, platform revenue]
+game: poe2
+domain: platform
+status: draft
+tables:
+  - poe2_pc.app_poe2_platform_revenue_d
+sql:
+  - Path of Exile 2/poe2_pc_sales/app_platform_revenue_d.sql
+dag:
+  - databrain_poe2_d_v0
+grain: date × os × country × product
+```

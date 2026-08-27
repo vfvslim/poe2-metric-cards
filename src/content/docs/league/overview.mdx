@@ -1,0 +1,102 @@
+---
+title: PoE2 League Overview
+description: League/season cumulative KPIs so far for the active league, by country and platform.
+---
+
+import MetricMeta from '../../../components/MetricMeta.astro';
+import { Aside } from '@astrojs/starlight/components';
+
+<MetricMeta
+	status="draft"
+	module="League"
+	table="app_poe2_league_overview"
+	source="active overview + pay flat + register retention, league-windowed"
+	grain="as-of date × league_name × country × os"
+	notThis="normal daily DAU"
+/>
+
+<Aside type="tip" title="Always name the league">
+	Values are cumulative inside the league window, so a number is meaningless
+	without the league and its `start_date` / `end_date`.
+</Aside>
+
+## 业务问题 BUSINESS QUESTION
+
+What are PoE2 league / season cumulative KPIs so far for the active league, by country and platform?
+
+## 指标定义
+
+League overview KPIs in `app_poe2_league_overview` (season-window **cumulative**, not normal daily DAU).
+
+## 计算公式
+
+DAG provides `league_name`, `start_date`, `end_date`. SQL aggregates daily tables inside that league window up to the as-of date.
+
+Selected fields:
+
+- Activity / `new_users`: from active overview over league dates so far
+- `max_dau`: max daily active in window
+- `return_user`: `return_users` − `new_users`
+- `d30_dau`: avg DAU over first 30 days of league
+- `ingame_revenue`: `sum(pay_amount) / 100` from pay flat over league window
+- `avg_d1_retention`: avg D1 retention under league logic
+
+## 口径要素
+
+### 分子 Numerator
+
+Depends on field:
+
+- Activity fields from `app_poe2_active_overview_d`
+- `ingame_revenue` from `app_poe2_pay_flat_d.pay_amount / 100`
+- Retention from register-retention logic in the league window
+
+### 分母 Denominator
+
+None.
+
+### 粒度 Grain
+
+One row per `dtstatdate` (as-of date), `league_name`, `country_code`, `os`.
+
+Values are generally **cumulative within the league window**.
+
+## 过滤条件 FILTERS
+
+- `dtstatdate = '{{ ds }}'`
+- League window: `start_date` to `end_date` from DAG XCom / league info
+- Aggregate only dates inside that league window and `<= dtstatdate`
+
+## 维度
+
+- `dtstatdate`
+- `league_name`
+- `country_code`
+- `os`
+
+## 踩坑与注意 CAVEATS
+
+- Always name the **league / window**.
+- League cumulative actives ≠ normal daily DAU. See [DAU](/core/dau/).
+- League `ingame_revenue` = in-game MTX in the league window, **not** platform / store revenue. See [In-game pay](/core/ingame-pay-amount/) and [Platform net revenue](/core/platform-net-revenue/).
+
+## SQL 模式
+
+Resolve active league dates → aggregate daily active / pay / retention tables within the window → write `app_poe2_league_overview`.
+
+## YAML
+
+```yaml
+id: league_overview
+aliases: [league KPIs, season overview, ingame_revenue]
+game: poe2
+domain: league
+status: draft
+tables:
+  - poe2_pc.app_poe2_league_overview
+sql:
+  - Path of Exile 2/League/app_poe2_league_overview.sql
+dag:
+  - databrain_poe2_league_d_v0
+grain: as-of date × league_name × country × os
+```
