@@ -6,10 +6,10 @@ hero:
   tagline: What each metric means, how it is calculated, and what not to confuse it with. Definitions only — not live KPI values.
   actions:
     - text: Start with DAU
-      link: /core/dau/
+      link: /poe2-metric-cards/core/dau/
       icon: right-arrow
     - text: League overview
-      link: /league/overview/
+      link: /poe2-metric-cards/league/overview/
       icon: right-arrow
       variant: minimal
 ---
@@ -21,17 +21,17 @@ import { CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
 <CardGrid>
 	<LinkCard
 		title="DAU / Active Users"
-		href="/core/dau/"
+		href="/poe2-metric-cards/core/dau/"
 		description="Players active on a calendar day, by country and platform."
 	/>
 	<LinkCard
 		title="Register Retention D1"
-		href="/core/register-retention-d1/"
+		href="/poe2-metric-cards/core/register-retention-d1/"
 		description="Next-day return of a register cohort, stored as active_users_d2."
 	/>
 	<LinkCard
 		title="Overview Retention / Return / Churn"
-		href="/core/active-overview-retention-return-churn/"
+		href="/poe2-metric-cards/core/active-overview-retention-return-churn/"
 		description="Stubbed — hard-coded 0 on active overview. Not a KPI."
 	/>
 </CardGrid>
@@ -41,12 +41,12 @@ import { CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
 <CardGrid>
 	<LinkCard
 		title="In-Game Pay Amount / Paid Users"
-		href="/core/ingame-pay-amount/"
+		href="/poe2-metric-cards/core/ingame-pay-amount/"
 		description="MTX payers and spend from the pay bitmap — not store revenue."
 	/>
 	<LinkCard
 		title="Platform Net Revenue"
-		href="/core/platform-net-revenue/"
+		href="/poe2-metric-cards/core/platform-net-revenue/"
 		description="Store net revenue after chargebacks, by store and product."
 	/>
 </CardGrid>
@@ -56,7 +56,7 @@ import { CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
 <CardGrid>
 	<LinkCard
 		title="League Overview"
-		href="/league/overview/"
+		href="/poe2-metric-cards/league/overview/"
 		description="Season-window cumulative KPIs for the active league."
 	/>
 </CardGrid>
