@@ -14,6 +14,9 @@ export default defineConfig({
 			pagefind: false,
 			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
 			lastUpdated: false,
+			components: {
+				LastUpdated: './src/components/EmptyLastUpdated.astro',
+			},
 			sidebar: [
 				{
 					label: '数据分层',

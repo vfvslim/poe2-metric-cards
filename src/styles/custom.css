@@ -52,6 +52,11 @@
 	font-weight: 600;
 }
 
+/* Hide Starlight "Last updated" even if an old cached HTML still has the node. */
+footer .meta p:has(time) {
+	display: none !important;
+}
+
 /* ---- Metric header ---- */
 
 .metric-meta {
