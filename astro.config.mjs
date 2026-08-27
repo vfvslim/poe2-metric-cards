@@ -4,6 +4,8 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://vfvslim.github.io',
+	base: '/poe2-metric-cards',
 	integrations: [
 		starlight({
 			title: 'PoE2 口径卡',
