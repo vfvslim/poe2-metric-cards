@@ -8,7 +8,7 @@ export default defineConfig({
 	base: '/poe2-metric-cards',
 	integrations: [
 		starlight({
-			title: 'PoE2',
+			title: 'Path of Exile 2',
 			description: 'Path of Exile 2 metric definitions for Databrain',
 			customCss: ['./src/styles/custom.css'],
 			pagefind: false,
