@@ -13,7 +13,7 @@ export default defineConfig({
 			customCss: ['./src/styles/custom.css'],
 			pagefind: false,
 			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
-			lastUpdated: true,
+			lastUpdated: false,
 			sidebar: [
 				{
 					label: '数据分层',
