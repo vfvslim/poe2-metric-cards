@@ -44,7 +44,7 @@ export default defineConfig({
 									collapsed: true,
 									items: [
 										{ label: 'In-game Pay Amount / Paid Users', slug: 'core/ingame-pay-amount' },
-										{ label: 'Platform Net Revenue', slug: 'core/platform-net-revenue' },
+										{ label: 'Platform Net Revenue / Units Sold', slug: 'core/platform-net-revenue' },
 									],
 								},
 								{
