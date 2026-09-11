@@ -1,6 +1,6 @@
 ---
-title: PoE2 Platform Net Revenue
-description: PoE2 platform/store net revenue by store, country, and product on a given day.
+title: PoE2 Platform Net Revenue / Units Sold
+description: PoE2 platform/store net revenue and units sold by store, country, and product on a given day.
 ---
 
 import MetricMeta from '../../../components/MetricMeta.astro';
@@ -9,28 +9,59 @@ import MetricMeta from '../../../components/MetricMeta.astro';
 	status="draft"
 	module="Core · Platform"
 	table="app_poe2_platform_revenue_d"
-	source="per-store revenue tables (union)"
+	source="sales platform -> per-store APP -> union"
 	grain="date × os × country × product"
 	notThis="in-game MTX (app_poe2_pay_flat_d)"
 />
 
 ## 业务问题 BUSINESS QUESTION
 
-What is PoE2 platform / store net revenue by store, country, and product on a given day?
+What is PoE2 platform / store net revenue and units sold by store, country, and product on a given day?
 
 ## 指标定义
 
-Platform (store) **net revenue** / net revenue after chargebacks.
+Platform (store) metrics from the sales pipeline:
+
+- **Revenue:** `net_revenue` (net revenue after chargebacks), plus related gross / chargeback revenue fields
+- **Sales (units):** `net_units_sold` (units after chargebacks), plus related gross / chargeback unit fields
+
+## 数据来源 DATA SOURCE
+
+- From **sales / store** pipelines (Steam sales files, Xbox/PS payment transactions, etc.)
+- Each store builds its own APP table, then they are **unioned** into `app_poe2_platform_revenue_d`
+- **Not** GGG streaming agg (that path is for DAU / new / retention)
+- **Not** in-game MTX (`app_poe2_pay_flat_d`)
+
+## 平台口径 PLATFORM RULES
+
+| Platform | os | Upstream | Logic (short) |
+|---|---|---|---|
+| Steam | 11 | `poe2_steam_sales` | Revenue: Steam sales USD + chargebacks. Units: from sales file; online units exclude `type='Retail'` |
+| Xbox | 9 | `e_payment_transaction` | `provider=live`; refund if amount < 0; convert to USD via FX. Each tx ≈ 1 unit; refunds → chargeback units |
+| PlayStation | 8 | `e_payment_transaction` | Same idea as Xbox but `provider=psn` and different pack filters (revenue + units) |
+| Epic | 12 | `e_payment_transaction` | `provider=epic`; refund if amount < 0; convert to USD via FX; same unit/refund pattern |
+| Official Web | 13 | `e_payment_transaction` | `provider` in karma_koin / stripe / xsolla / boa_compra; same refund / FX / unit pattern |
+| Kakao | 15 | `e_payment_transaction` | `provider=kakao`; same refund / FX / unit pattern |
+
+**Steam** is the odd one out: it uses the store sales file `poe2_steam_sales`.
+
+The others all come from payment transactions with different `provider` filters.
 
 ## 计算公式
 
-Each store SQL runs first (Steam / Xbox / PlayStation / Epic / official web / Kakao), then union into `app_poe2_platform_revenue_d`.
+Each store SQL runs first (Steam / Xbox / PlayStation / Epic / official web / Kakao), then unioned into `app_poe2_platform_revenue_d`.
+
+Same table carries both revenue and unit columns.
 
 ## 口径要素
 
 ### 分子 Numerator
 
-`net_revenue` (and related gross / chargeback / unit fields) aggregated from per-store revenue tables into `app_poe2_platform_revenue_d`.
+From `app_poe2_platform_revenue_d` (aggregated from per-store revenue tables):
+
+- **Revenue:** `gross_revenue`, `chargeback_revenue`, `net_revenue`
+- **Units (sales):** `gross_units_sold`, `chargeback_units`, `net_units_sold`
+- Related full-game / online unit and revenue fields when needed
 
 ### 分母 Denominator
 
@@ -38,7 +69,7 @@ None.
 
 ### 粒度 Grain
 
-`dtstatdate` x `os` x `country_code` x `product_unified_id` / category.
+`dtstatdate` × `os` × `country_code` × `product_unified_id` / `category`.
 
 ## 过滤条件 FILTERS
 
@@ -50,7 +81,7 @@ None.
   - 12 = Epic
   - 13 = Official web
   - 15 = Kakao
-- Product eligibility depends on `poe_product_list` / store product-info tables
+- Product eligibility depends on `poe2_product_list` / store product-info tables
 
 ## 维度
 
@@ -62,14 +93,16 @@ None.
 
 ## 踩坑与注意 CAVEATS
 
-- Platform revenue only; **not** in-game MTX (`app_poe2_pay_flat_d`). See [In-game pay](/poe2-metric-cards/core/ingame-pay-amount/).
+- Platform **store** metrics (revenue **and** units sold); **not** in-game MTX (`app_poe2_pay_flat_d`). See [In-game pay](/poe2-metric-cards/core/ingame-pay-amount/).
+- **Sales** here means **units sold** (`net_units_sold`), not only revenue dollars.
 - Not the same as league `ingame_revenue` (`sum(pay_amount) / 100` over the league window). See [League overview](/poe2-metric-cards/league/overview/).
 - Always say **platform / store** vs **in-game**.
 - PoE1 in the focus folder is more Steam-centric; do not assume the same full multi-store union.
+- Steam / Xbox / PS (and other providers) use different calculation paths — see 平台口径.
 
 ## SQL 模式
 
-Build per-store daily revenue tables → union in `app_platform_revenue_d.sql` → land in `app_poe2_platform_revenue_d`.
+Build per-store daily revenue tables → union in `app_platform_revenue_d.sql` → land in `app_poe2_platform_revenue_d` (revenue + unit columns).
 
 ## YAML
 
@@ -86,7 +119,7 @@ caliber:
 	formula_summary:
 	filters:
 	- 
-	grain: date × os × country × product
+	grain: date × register_date × country × product
 	dimensions:
 	- 
 source_tables:
